@@ -1,0 +1,269 @@
+<?php
+
+$conn_error="could not connect";
+
+$mysql_host="localhost";
+$mysql_user="root";	
+$mysql_pass='';
+$mysql_table="maintable";
+
+
+mysql_connect($mysql_host,$mysql_user,$mysql_pass) or die($conn_error);
+
+mysql_select_db('wp');
+
+session_start();
+
+$batchnum =	$_SESSION['batchnum'];
+
+
+
+$query = "SELECT usn FROM `test1` WHERE batchno='$batchnum'";
+
+if($query_run = mysql_query($query)){
+
+	
+	$a=array();	
+
+	while($row = mysql_fetch_assoc($query_run))
+	{
+
+
+		array_push($a,"{$row['usn']}");
+
+	} 
+
+
+}
+
+
+
+$x = sizeof($a);
+
+if($x < 4){
+
+	for($i=$x;$i<4;$i++){
+		array_push($a,"NO USN");
+	}
+
+
+} 
+if(isset($_POST['usn1f']) && isset($_POST['usn2f']) && isset($_POST['usn3f'])  && isset($_POST['usn4f']) ){
+	$usn1f = $_POST['usn1f'];
+	$usn2f = $_POST['usn2f'];
+	$usn3f = $_POST['usn3f'];
+	$usn4f = $_POST['usn4f'];
+
+	if(!empty($usn1f) &&  !empty($usn2f) && !empty($usn3f) && !empty($usn4f) ){
+
+		if(empty($uns4f)){
+
+			$query = "UPDATE `test1` set crit5 ='$usn1f' where usn='$a[0]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			$query = "UPDATE `test1` set crit5 ='$usn2f' where usn='$a[1]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			$query = "UPDATE `test1` set crit5 ='$usn3f' where usn='$a[2]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			echo "
+			<script type='text/javascript'>
+				alert('Updated');
+			</script>
+			";
+
+
+		}else{
+			$query = "UPDATE `test1` set crit5 ='$usn1f' where usn='$a[0]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			$query = "UPDATE `test1` set crit5 ='$usn2f' where usn='$a[1]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			$query = "UPDATE `test1` set crit5 ='$usn3f' where usn='$a[2]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			$query = "UPDATE `test1` set crit5 ='$usn4f' where usn='$a[3]' ";
+			if($query_run = mysql_query($query)){
+			}
+
+			echo "
+			<script type='text/javascript'>
+				alert('Updated');
+			</script>
+			";
+
+		}
+
+
+
+
+
+	}
+
+}
+
+?>
+
+
+
+
+
+<html>
+<head>
+	<title> RUBRIC 5 </title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script type="text/javascript">
+		function calcAvg () {
+			domusn1m1 = document.getElementByid("usn1m1");
+			domusn1m2 = document.getElementByid("usn1m2");
+			domusn1m3 = document.getElementByid("usn1m3");
+
+			domusn2m1 = document.getElementByid("usn2m1");
+			domusn2m2 = document.getElementByid("usn2m2");
+			domusn2m3 = document.getElementByid("usn2m3");
+
+
+			domusn3m1 = document.getElementByid("usn3m1");
+			domusn3m2 = document.getElementByid("usn3m2");
+			domusn3m3 = document.getElementByid("usn3m3");
+
+
+			domusn4m1 = document.getElementByid("usn4m1");
+			domusn4m2 = document.getElementByid("usn4m2");
+			domusn4m3 = document.getElementByid("usn4m3");
+
+			domusn1f = document.getElementByid("usn1f");
+			domusn2f = document.getElementByid("usn2f");
+			domusn3f = document.getElementByid("usn3f");
+			domusn4f = document.getElementByid("usn4f");
+
+
+			domusn1f.value = ((domusn1m1.value + domusn1m2.value + domusn1m3.value )/3);
+			domusn2f.value = ((domusn2m1.value + domusn2m2.value + domusn2m3.value )/3);
+			domusn3f.value = ((domusn3m1.value + domusn3m2.value + domusn4m3.value )/3);
+			domusn4f.value = ((domusn4m1.value + domusn4m2.value + domusn4m3.value )/3);
+
+
+
+
+
+		}
+	</script>
+</head>
+
+<body style="background-color:#031626; ">
+
+
+	<div class="container">
+		<div class="col-md-9 col-md-offset-1">
+
+			<h3  style="color:lightgray;">Team Work (Peer Review) </h3>
+			<form method="POST" action="Rubric5.php">
+
+				<table class="table" align="center" cellpadding="20">
+					<tr align="center" class="info">
+						<td  style="color:lightgray;"> USN
+						</td>
+						<td  style="color:lightgray;"> Teammate -1
+						</td>
+						<td  style="color:lightgray;"> Teammate -2 
+						</td>
+						<td  style="color:lightgray;"> Teammate -3 
+						</td>
+						<td  style="color:lightgray;"> Average
+						</td>
+					</tr>
+
+					<tr>
+						<td><input type="text" class="form-control" id="usn1" disabled="disabled" value="<?php echo $a[0] ?>" >
+						</td>
+						<td><input type="text" class="form-control" id="usn1m1">
+						</td>
+						<td> <input type="text" class="form-control" id="usn1m2">
+						</td>
+						<td><input type="text" class="form-control" id="usn1m3">
+						</td>
+						<td><input type="text" class="form-control" id="usn1f">
+						</td>
+
+					</tr>
+
+					<tr>
+						<td><input type="text" class="form-control" id="usn2" disabled="disabled" value="<?php echo $a[1] ?>" >
+						</td>
+						<td><input type="text" class="form-control" id="usn2m1">
+						</td>
+						<td> <input type="text" class="form-control" id="usn2m2">
+						</td>
+						<td><input type="text" class="form-control" id="usn2m3">
+						</td>
+						<td><input type="text" class="form-control" id="usn2f">
+						</td>
+					</tr>	
+					<tr>
+						<td><input type="text" class="form-control" id="usn3" disabled="disabled" value="<?php echo $a[2] ?>" >
+						</td>
+						<td><input type="text" class="form-control" id="usn3m1">
+						</td>
+						<td> <input type="text" class="form-control" id="usn3m2">
+						</td>
+						<td><input type="text" class="form-control" id="usn3m3">
+						</td>
+						<td><input type="text" class="form-control" id="usn3f">
+						</td>
+					</tr>
+
+					<tr>
+						<td><input type="text" class="form-control" id="usn4" disabled="disabled" value="<?php echo $a[3] ?>" >
+						</td>
+						<td><input type="text" class="form-control" id="usn4m1">
+						</td>
+						<td> <input type="text" class="form-control" id="usn4m2">
+						</td>
+						<td><input type="text" class="form-control" id="usn4m3">
+						</td>
+						<td><input type="text" class="form-control" id="usn4f">
+						</td>
+					</tr>
+				</table>
+				<br />
+				<input type="button" value="Calculate Avg" onclick="calcAvg();"> 
+				<br />
+				<input type="submit" value="Submit Marks">
+			</form>
+
+			<br />
+			<br />
+			<ul class="pagination pagination-lg" >
+				<li><a href="Rubric4.php">&laquo;</a></li>
+				<li><a href="FirstTable.php"> Main Table</a></li>
+				<li><a href="Rubric1.php">1</a></li>
+				<li><a href="Rubric2.php">2</a></li>
+				<li><a href="Rubric3.php">3</a></li>
+				<li><a href="Rubric4.php">4</a></li>
+				<li class="active"><a href="Rubric5.php">5</a></li>
+				<li><a href="Rubric6.php">6</a></li>
+				<li><a href="Rubric7.php">7</a></li>
+				<li><a href="Rubric8.php">8</a></li>
+				<li><a href="Rubric9.php">9</a></li>
+				<li><a href="Rubric10.php">10</a></li>
+				<li><a href="Rubric6.php">&raquo;</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+	
+	
+
+</body>
+
+</html>
